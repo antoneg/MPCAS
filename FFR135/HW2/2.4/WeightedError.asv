@@ -1,0 +1,1 @@
+function delta = WeightedError(ts, os, B, b)

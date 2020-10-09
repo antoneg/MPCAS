@@ -1,0 +1,3 @@
+function o = OutputActivation(threshold, weights, vs, m2)
+    
+end
