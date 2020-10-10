@@ -1,0 +1,12 @@
+function decoded = DecodeChromosome(chromosone, nrOfHiddenNeurons)
+% test = InitializePopulation(1,5)
+inputWeightsLimit = 3*nrOfHiddenNeurons;  
+outputWeightsLimit = 2*nrOfHiddenNeurons;
+thresholdLimit = nrOfHiddenNeurons;
+
+inputWeights = chromosone(1:inputWeightsLimit)
+
+outputWeights = chomosome(inputWeightsLimit+1:outputWeightsLimit)
+
+thresholds = chomosome()
+end

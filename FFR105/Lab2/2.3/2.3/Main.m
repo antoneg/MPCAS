@@ -17,9 +17,18 @@ startV = 25;
 gear = 7;
 Tb = 500;
 
+nrIteration = 3;
 numbOfhiddenNerurons = 5; %3-10
 
-
+for i = 1:nrIteration
+    
+        %fitness(i) = Evaluate -> get dist by feeding the network
+        %save the best
+        %selection
+        %mutation
+        %new population     
+ 
+end
 % 1. Initiera population (alltså vikter för nätverket i form av kromosomer)
 % 2. Evaluera population. Kör simulering med vikterna för varje kromosom och spara fitness
 % 3. Mutation/cross/tournament'

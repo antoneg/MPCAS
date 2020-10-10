@@ -1,0 +1,6 @@
+function pop = InitializePopulation(popSize, nrOfHiddenNeurons)
+    for i = popSize
+        %pop(i) = createChromosome
+        
+    end
+end
