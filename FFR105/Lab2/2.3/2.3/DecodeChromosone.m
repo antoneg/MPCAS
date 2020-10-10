@@ -2,18 +2,23 @@ function decoded = DecodeChromosone(chromosone, nrOfHiddenNeurons, selecter)
 
 inputWeightsLimit = 3*nrOfHiddenNeurons;  
 outputWeightsLimit = 2*nrOfHiddenNeurons + inputWeightsLimit;
-thresholdLimit = nrOfHiddenNeurons + outputWeightsLimit;
+hiddenThresholdLimit = nrOfHiddenNeurons + outputWeightsLimit;
+outputThresholdLimit = 2 + hiddenThresholdLimit;
 
 inputWeights = chromosone(1:inputWeightsLimit);
 
 outputWeights = chromosone(inputWeightsLimit+1:outputWeightsLimit);
 
-thresholds = chromosone(outputWeightsLimit+1:thresholdLimit);
+hiddenThresholds = chromosone(outputWeightsLimit+1:hiddenThresholdLimit);
+
+outputThresholds = chromosone(hiddenThresholdLimit+1:outputThresholdLimit);
 
 if selecter == 1
     decoded = inputWeights;
 elseif selecter == 2
     decoded = outputWeights;
-else
-    decoded = thresholds;
+elseif selecter == 3
+    decoded = hiddenThresholds;
+else 
+    decoded = outputThresholds;
 end

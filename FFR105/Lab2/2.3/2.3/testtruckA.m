@@ -25,5 +25,5 @@ brakeForce = FoundationBrakeForce(M, testPressure, Tb, Tmax);
 engineBrakeForce = EngineBreakForce(gear, Cb);
 acc = Acceleration(M, gravityForce, brakeForce, engineBrakeForce);
 
-v = CurrentVelocity(acc, deltaT);
+v = NextVelocity(acc, deltaT)
 

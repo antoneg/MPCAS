@@ -5,8 +5,7 @@ if brakeTemp < (tempMax - 100)
     f = (mass*g*pressure)/20; 
 else 
     factor1 = (mass*g*pressure)/20;
-    exponent =  -(brakeTemp-(tempMax-100))/100;
-    factor2 = exp(exponent);   %(-(brakeTemp - (tempMax-100)) )/100 ; %Hmm
+    factor2 = exp   (-())  %(-(brakeTemp - (tempMax-100)) )/100 ; %Hmm
     f = factor1*factor2;
 end
 end

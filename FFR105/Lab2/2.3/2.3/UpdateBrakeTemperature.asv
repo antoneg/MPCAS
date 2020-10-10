@@ -3,8 +3,7 @@ function newBrakeTemp = UpdateBrakeTemperature(pressure, brakeTemp, tau, deltaTi
     if pressure < 0.01
         tempStep = -(deltaBrakeTemp)/tau;
     else 
-        tempStep = Ch*pressure;
+        tempStep = brakeTemp + Ch*pressure*deltaTime;
     end
-    deltaBrakeTemp = deltaBrakeTemp + tempStep*deltaTime;
-    newBrakeTemp = ambientTemp + deltaBrakeTemp;
+    
 end
