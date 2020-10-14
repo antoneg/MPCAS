@@ -1,0 +1,23 @@
+function instructionSets = InitializePopulation(popSize, nrOfOperators, nrOfOVars, nrOfConsts)
+    
+    %nr of instructionSet 5-25
+    %4 nr of operands + - x /
+    %3 nr of var
+    %3 nr of const
+    %3 nr of destinations operand1 operand2
+    
+    %operator destination operand1 operant2
+    nrOfIstructions = randi([5,25],1,1);
+    for i = 1:popSize
+        nrOfIstructions = randi([5,25],1,1);
+    for j = 1:nrOfIstructions
+
+        operator = randi([1,nrOfOperators],1,1);
+        destination = randi([1,nrOfOVars],1,1);
+        operand1 = randi([1,(nrOfOVars+nrOfConsts)],1,1);
+        operand2 = randi([1,(nrOfOVars+nrOfConsts)],1,1);
+    
+    end
+    end
+
+end

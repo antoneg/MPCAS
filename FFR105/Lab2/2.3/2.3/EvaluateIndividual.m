@@ -1,22 +1,30 @@
-function fitness = EvaluateIndividual(chrom, nrOfHiddenNeurons)
-    %for each timestamp, feed to the network
-    slopeLenght = 1000;
-    noViolation = true;
-    
-    %Decode and construct to matrices
-    inputWeights = DecodeChromosone(chrom, nrOfHiddenNeurons, 1);
-    inputWeightMatrix = reshape(inputWeights,nrOfHiddenNeurons,3);    
-    
-    outputWeights = DecodeChromosone(chrom, nrOfHiddenNeurons,2);
-    
-    outputWeightsMatrix = reshape(outputWeights,2,nrOfHiddenNeurons);
-    
-    hiddenThresholds = DecodeChromosone(chrom, nrOfHiddenNeurons, 3);
-    hiddenThresholds = hiddenThresholds';
-    
-    outputThresholds = DecodeChromosone(chrom, nrOfHiddenNeurons, 4);
-    outputThresholds = outputThresholds';
-    
+function fitness = EvaluateIndividual(chrom, nrOfHiddenNeurons, dataSet)
+
+%Decode and construct to matrices
+inputWeights = DecodeChromosone(chrom, nrOfHiddenNeurons, 1);
+inputWeightMatrix = reshape(inputWeights,nrOfHiddenNeurons,3);
+
+outputWeights = DecodeChromosone(chrom, nrOfHiddenNeurons,2);
+
+outputWeightsMatrix = reshape(outputWeights,2,nrOfHiddenNeurons);
+
+hiddenThresholds = DecodeChromosone(chrom, nrOfHiddenNeurons, 3);
+hiddenThresholds = hiddenThresholds';
+
+outputThresholds = DecodeChromosone(chrom, nrOfHiddenNeurons, 4);
+outputThresholds = outputThresholds';
+
+fitness=0;
+nrOfSlopes = 0;
+
+backLog = [];
+backLog;
+if dataSet == 1
+    nrOfSlopes = 10;
+else
+    nrOfSlopes = 5;
+end
+for iSlope = 1:nrOfSlopes
     mass = 20000;
     vMax = 25;
     vMin = 1;
@@ -37,105 +45,117 @@ function fitness = EvaluateIndividual(chrom, nrOfHiddenNeurons)
     distance = 0;
     currentPressure = 0;
     
-velocities = [];
+    velocities = [];
     
     noViolation = true;
     notFinished = true;
     
     deltaTime = 0.12;
     
-    iter = 1;
-    
-    gearTime = 2;
+    iter = 0;
+    penaly = 0;
+    gearTime = 0;
+    localFitness = 0;
     while noViolation && notFinished
+        %Next iteration..
         iter = iter +1;
         
+        %Add current velocity to the list.
         velocities(iter) = currentVelocity;
         
+        %Alpha
+        currentAlpha = GetSlopeAngle(distance,iSlope,dataSet);
         
+        %Calculate current acting forces
+        engineBrakeForce = EngineBreakForce(currentGear, Cb);
+        brakeForce = FoundationBrakeForce(mass, currentPressure, currentBrakeTemp, brakeTempMax);
+        gravityForce = GravityForce(mass, currentAlpha);
+        acc = Acceleration(mass, gravityForce, brakeForce, engineBrakeForce);
+        
+        %Prepare the inputs to the network
         vInput = currentVelocity/vMax;
-        currentAlpha = GetSlopeAngle(distance,1,1);
         aInput = currentAlpha/alphaMax;
         tInput = currentBrakeTemp/brakeTempMax;
         
         inputVector = [vInput;aInput;tInput];
         
-        %forward propagation
-      
+        %Feed inputs to network, (forward propagation).
+        
         hiddenLocalfield = (inputWeightMatrix*inputVector)-hiddenThresholds;
         hiddenNeurons = SigmoidActivation(hiddenLocalfield);
         
         ouputLocalField = outputWeightsMatrix * hiddenNeurons - outputThresholds;
         output = SigmoidActivation(ouputLocalField);
         
+        %Get output
         newPressure = output(1);
-        gearFlex = output(2);
+        gearChange = output(2);
         
-        if ((gearFlex > 0.7) || (gearFlex < 0.3)) && (gearTime < 2)
-            noViolation = false;
-        end
-        
-        if gearFlex > 0.7
-            newGear = currentGear + 1;
-            gearTime = 0;
-        elseif gearFlex < 0.3
-            newGear = currentGear - 1;
-            gearTime = 0;
+        %Desired gear change
+        if gearTime >= 2
+            
+            if gearChange > 0.7
+                newGear = currentGear + 1;
+                gearTime = 0;
+            elseif gearChange < 0.3
+                newGear = currentGear - 1;
+                gearTime = 0;
+            else
+                newGear = currentGear;              
+            end
         else
             newGear = currentGear;
         end
-        
-        
-                %distance (and alpha x)!
-        distance = distance + currentVelocity*deltaTime; 
-        if(distance >= 1000)
-            notFinished = false;
-            disp("HAHA")
+        %Dont shift gear if at max or min gear
+        if (newGear < 1)
+            newGear = 1;
         end
         
-        if (newGear < 1) || (newGear > 10)
-            noViolation = false;
-%             disp("Bad gear ");
-%             disp("Gear " + newGear);
-%             disp("Velocity: " + currentVelocity);
-%             disp("Distance: " + distance);
-%             disp("Mean v: " + mean(velocities));
+        if newGear > 10
+            newGear = 10;
         end
         
-        
-        
-        %new velocity!
-        engineBrakeForce = EngineBreakForce(currentGear, Cb);
-        brakeForce = FoundationBrakeForce(mass, currentPressure, currentBrakeTemp, brakeTempMax);
-        gravityForce = GravityForce(mass, currentAlpha);
-        acc = Acceleration(mass, gravityForce, brakeForce, engineBrakeForce);
-        nextV = DeltaVelocity(acc, deltaTime);
-        
-        
-        %new brake temp! 
-        currentBrakeTemp = UpdateBrakeTemperature(currentPressure, currentBrakeTemp, tau, deltaTime, Ch, ambientTemp);      
+        %New brake temp
+        newBrakeTemp = UpdateBrakeTemperature(currentPressure, currentBrakeTemp, tau, deltaTime, Ch, ambientTemp);
         if currentBrakeTemp > brakeTempMax
             noViolation = false;
-%             disp("currentBrakeTemp is big ");
-%             disp("Brake Temp: " + currentBrakeTemp);
-%             disp("Distance: " + distance);
-%             disp("Mean v: " + mean(velocities));
-
         end
         
+        
+        %Distance traveled and next x.
+        distance = DistanceIncrement(distance, currentVelocity,deltaTime,currentAlpha );
         gearTime = gearTime + deltaTime;
+        
+        
+        %New velocity!
+        newVelocity = VelocityIncrement(acc, deltaTime,currentVelocity);
+        
+        %Update
         currentPressure = newPressure;
         currentGear = newGear;
-        currentVelocity = currentVelocity + nextV;
-        if (currentVelocity > 25) || (currentVelocity < 1)
+        currentBrakeTemp = newBrakeTemp;
+        currentVelocity = newVelocity;
+        gearTime = gearTime + deltaTime;
+        
+        %Check for violations
+        
+        if (currentVelocity > 25) || (currentVelocity < 1) || (currentBrakeTemp > brakeTempMax)
             noViolation = false;
-%             disp("Velocity is bad ");
-%             disp("Velocity: " + currentVelocity);
-%             disp("Distance: " + distance);
-%             disp("Mean v: " + mean(velocities));
+        end
+        
+        if(distance >= 1000)
+            notFinished = false;
         end
     end
     
-    fitness = mean(velocities)*distance;
-    
+    penalty = 1;
+    if(distance < 1000)
+        penalty = distance/1000;
+    end
+    meanVelocity = mean(velocities);
+    localFitness = distance*meanVelocity*penalty;
+   
+    fitness = fitness + localFitness;
+end
+fitness = fitness/nrOfSlopes;
 end
