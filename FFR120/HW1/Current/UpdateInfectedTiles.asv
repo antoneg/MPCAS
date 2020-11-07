@@ -1,0 +1,17 @@
+function updatedInfected = UpdateInfectedTiles(infected)
+    nrOfInfected = size(infected,1);
+    updatedInfected = []; 
+    
+    
+    for i = 1:nrOfinfected
+        ind = infected(i,1);
+        x = infected(i,2);
+        y = infected(i,3);
+
+        tileNr = (x-1)*10 + y;
+        infectedHere = infectedTiles
+        infectedTiles = containers.Map(tileNr,[i]);
+        
+        updatedInfected = containers.Map(i,valueSet)
+    end
+end

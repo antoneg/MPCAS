@@ -1,0 +1,18 @@
+function tileTracker = UpdateTileTracker(susceptibles, infected, recovered, oldTileTracker)
+for i = 1:nrOfIndividuals
+%     rx = randi([1,100],1,1);
+%     ry = randi([1,100],1,1);
+%     susceptibles(i,:) = [i;rx;ry];
+    %Keep track on tiles with individuals.
+    
+    for i = 
+    tileNr = (rx-1)*10 + ry;
+    if (isKey(tileTracker, tileNr))
+        tileIndividuals = tileTracker(tileNr);
+        tileIndividuals(end) = i;
+        tileTracker = container.Map(tileNr,tileIndividuals);
+    else
+        tileTracker = container.Map(tileNr,tileIndividuals);
+    end
+end
+end
