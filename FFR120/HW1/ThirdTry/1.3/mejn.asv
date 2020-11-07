@@ -1,20 +1,25 @@
-%Individual indx, tile, x, y, state(s,i,r <=> 0,1,2)
+%plotSelection:
+    %1: plot every 100 timesteps
+    %2: plot 100th timestep
+    %3: plot nothing
+function DiseaseAnalysis(popSize, timeSteps, dProb, bProb, yProb, initInfected, plotSelection)
 population = [];
 popSize = 1000;
 timeSteps = 1000;
 dProb = 0.8;
 bProb = 0.6;
-yProb = 0.025;
-initInfected = 10;
+yProb = 0.01;
+initInfected = 100;
 %Keep track on what individuals are at a given tile.
 tileTracker = containers.Map('KeyType','double','ValueType','any');
 
+plotSelection = 1;
+%Individual indx, tile, x, y, state(s,i,r <=> 1,2,3)
 %Initialize population (with no infections) and tileTracker. MAKE FUNCTION
 %OF THIS
-
 for i = 1:popSize
-    x = randi([25,75],1,1); 
-    y = randi([25,75],1,1);
+    x = randi([1,100],1,1);
+    y = randi([1,100],1,1);
     tileNr = (x-1)*100+y;
     population(i,:) = [i,tileNr,x,y,1];
     if isKey(tileTracker, tileNr)
@@ -28,8 +33,7 @@ end
 
 %Initial infections
 for i = 1:initInfected
-% rIndx = randi([1,popSize],1,1);
-population(i,5) = 2;
+    population(i,5) = 2;
 end
 
 for t = 1:timeSteps
@@ -43,7 +47,7 @@ for t = 1:timeSteps
         recXs = recoveredPop(:,3);
         recYs = recoveredPop(:,4);
         if mod(t, 100) == 0
-            scatter(recXs, recYs, 'g');
+            plot(recXs, recYs, 'g.');
             hold on
         end
     end
@@ -53,7 +57,7 @@ for t = 1:timeSteps
         susYs = susceptiblePop(:,4);
         if mod(t, 100) == 0
             
-            scatter(susXs, susYs, 'b');
+            plot(susXs, susYs, 'b.');
             hold on
         end
     end
@@ -61,24 +65,22 @@ for t = 1:timeSteps
     if size(infectedPop,1) > 0
         infXs = infectedPop(:,3);
         infYs = infectedPop(:,4);
-        if mod(t, 100) == 0           
-            scatter(infXs, infYs, 'r');
+        if mod(t, 100) == 0
+            plot(infXs, infYs, 'r.');
         end
     end
     
-    
     axis([0 100 0 100]);
-    
     hold off
-   
-   %Save data for final plot
-   nrOfSus = size(susceptiblePop,1);
-   nrOfInf = size(infectedPop,1); 
-   nrOfRec = size(recoveredPop,1);
-   susData(t) = nrOfSus;
-   infData(t) = nrOfInf;
-   recData(t) = nrOfRec;
-   
+    
+    %Save data for final plot
+    nrOfSus = size(susceptiblePop,1);
+    nrOfInf = size(infectedPop,1);
+    nrOfRec = size(recoveredPop,1);
+    susData(t) = nrOfSus;
+    infData(t) = nrOfInf;
+    recData(t) = nrOfRec;
+    
     %Infect and Recover
     population = InfectRecover(population, infectedPop, tileTracker, bProb, yProb);
     
@@ -87,8 +89,9 @@ for t = 1:timeSteps
 end
 
 figure(200)
-scatter([1:timeSteps], susData, 'b');
+plot([1:timeSteps], susData, 'b.');
 hold on
-scatter([1:timeSteps], infData, 'r');
+plot([1:timeSteps], infData, 'r.');
 hold on
-scatter([1:timeSteps], recData, 'g');
+plot([1:timeSteps], recData, 'g.');
+end
