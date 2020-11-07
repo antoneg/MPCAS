@@ -1,0 +1,33 @@
+compIndexes = [];
+for j = 1:10
+    stValid(i)
+end
+for i = 1:14
+    indx = randi([1,10000],1,1);
+    i 
+    indx
+    feed = xValid(:,indx);   
+    target = xValidTmp(:,:,1,indx);
+    
+    output = predict(net2,feed);     
+    output2d = reshape(output,28,28);
+    
+    %plot target and output
+    subplot(2,14,i), imshow(mat2gray(target));
+    subplot(2,14,14+i), imshow(mat2gray(output2d));
+end
+
+% feed = xValid(:,11);
+% tp = predict(net1,xValid(:,11));
+% 
+% 
+% tp2d = reshape(tp,28,28);
+% feed2d = reshape(feed,28,28);
+% 
+% 
+% 
+% 
+% % imshow(tp2d)
+% 
+% subplot(1,2,1), imshow(mat2gray(feed2d));
+% subplot(1,2,2), imshow(mat2gray(tp2d));

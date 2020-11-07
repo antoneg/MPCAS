@@ -1,0 +1,14 @@
+nrOfLayers = size(net1.Layers);
+layers_encode = [];
+layers_decode = [];
+for i = 1:nrOfLayers-3
+  layers_encode(i) = net1.Layers(i);
+end
+
+for i = 6:8
+  layers_encode(i) = net1.Layers(i);
+end
+
+layers_encode
+
+size(net1.Layers)

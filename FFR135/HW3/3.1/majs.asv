@@ -1,0 +1,43 @@
+
+%Train the network using stochastic gradient descent with Momentum = 0.9 for at most 60 epochs with MiniBatchSize = 8192 
+%and InitialLearningRate = 0.001. For early stopping use ValidationPatience = 5 and ValidationFrequency = 30. 
+
+%For the convolution layer and fully connected layers, initialise the weights from a normal distribution with mean 0 and standard deviation 0.01 
+%(set the WeightsInitializer argument to narrow-normal). Shuffle the training set before each epoch. 
+%Calculate the classification errors obtained on the training, validation, and test sets separately. 
+%The training time should be at most 2 hours on one CPU.
+
+
+[xTrain, tTrain, xValid, tValid, xTest, tTest] = LoadMNIST(3);
+
+options = trainingOptions('sgdm', ...
+    'Momentum',0.9,...
+    'InitialLearnRate', 0.00100,...
+    'MaxEpochs',60, ...
+    'MiniBatchSize',8192, ...
+    'ValidationData',{xValid,tValid}, ...
+    'ValidationPatience',5 ,...
+    'ValidationFrequency', 30,...
+    'Shuffle', 'every-epoch',...
+    'Plots','training-progress');
+
+layers = [
+    imageInputLayer([28 28 1])           
+    convolution2dLayer(5,20,'Padding',1, ...
+    'WeightsInitializer','narrow-normal') 
+    reluLayer    
+    maxPooling2dLayer(2,'Stride',2)        
+    fullyConnectedLayer(100,'WeightsInitializer', 'narrow-normal')
+    reluLayer    
+    fullyConnectedLayer(10, 'WeightsInitializer', 'narrow-normal')
+    softmaxLayer
+    classificationLayer];
+
+net1 = trainNetwork(xTrain, tTrain, layers, options);
+
+trainPred = classify(net1,xTrain);
+validPred = classify(net1,xValid);
+testPred = classify(net1,xTest);
+
+
+
