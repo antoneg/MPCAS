@@ -1,4 +1,0 @@
-function newDistance = DistanceTraveled(distance, velocity,deltaTime,alpha)
-newDistance = distance + (currentVelocity*deltaTime*cosd(currentAlpha));
-end
-distance = distance + (currentVelocity*deltaTime*cosd(currentAlpha));

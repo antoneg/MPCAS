@@ -1,9 +1,0 @@
-function newBrakeTemp = UpdateBrakeTemperature(pressure, brakeTemp, tau, deltaTime, Ch, ambientTemp)
-    deltaBrakeTemp = brakeTemp - ambientTemp;
-    if pressure < 0.01
-        tempStep = -(deltaBrakeTemp)/tau;
-    else 
-        tempStep = brakeTemp + Ch*pressure*deltaTime;
-    end
-    
-end
