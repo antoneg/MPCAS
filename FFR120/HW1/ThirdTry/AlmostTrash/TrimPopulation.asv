@@ -1,1 +1,0 @@
-function trimmedpop = TrimPopulation(pop, selecter)
