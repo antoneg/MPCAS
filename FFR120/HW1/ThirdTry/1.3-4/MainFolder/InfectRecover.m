@@ -13,8 +13,11 @@ function pop = InfectRecover(population, infPop, tileTracker, bProb, yProb)
             
             for v = 1:nrOfVictims
                 vIndx = victims(v);
-                if
+                if pop(vIndx,5) == 3
+                   pop(vIndx, 5) = 3;
+                else
                 pop(vIndx, 5) = 2;
+                end
             end
         end
         r2 = rand;

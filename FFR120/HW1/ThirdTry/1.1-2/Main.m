@@ -1,8 +1,8 @@
 popSize = 1000;
 timeSteps = 1000;
 dProb = 0.8;
-bProb = 0.6;
-yProb = 0.01;
+bProb = 0.1;
+yProb = 0.02;
 initInfected = 100;
 plotSelection = 2; % 4: plot nothing, 
                    % 3 plot only 2nd figure, 

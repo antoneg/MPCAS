@@ -1,8 +1,8 @@
 popSize = 1000;
 timeSteps = 1000;
 dProb = 0.8;
-bProb = 0.6;
-yProb = 0.01;
+bProb = 0.6; %default beta
+
 initInfected = 10;
 plotSelection = 4;  % 4: plot nothing,
                     % 3: plot only 2nd figure,
@@ -15,7 +15,7 @@ allRecData = zeros(innerRuns,timeSteps,runs);
 allInfData = zeros(innerRuns,timeSteps,runs);
 allSusData = zeros(innerRuns,timeSteps,runs);
 for r = 1:runs
-    disp('Run: ' + r);
+     disp(r);
     for i = 1:innerRuns 
         y = i*0.001 - 0.001;
         [susData, infData, recData] = DiseaseAnalysis(popSize, timeSteps, dProb, bProb, y, initInfected, plotSelection);
@@ -173,5 +173,5 @@ end
 % end
 
 disp("END");
-save('allData.mat');
+save('allDataDefaultBeta.mat');
 

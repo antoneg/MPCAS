@@ -1,9 +1,10 @@
 
-function [susData, infData, recData] = DiseaseAnalysis(popSize, timeSteps, dProb, bProb, yProb, initInfected, plotSelection)
+function  [susData, infData, recData] = DiseaseAnalysis(popSize, timeSteps, dProb, bProb, yProb, initInfected, plotSelection)
+recData = [];
 susData = [];
 infData = [];
-recData = [];
 population = [];
+exitCri = false;
 
 %Keep track on what individuals are at a given tile.
 tileTracker = containers.Map('KeyType','double','ValueType','any');
@@ -35,15 +36,11 @@ for t = 1:timeSteps
     infectedPop = TrimPopulation(population, 2);
     recoveredPop = TrimPopulation(population, 3);
     
-    %Plot population
-    
-    PlotAgents(plotSelection,susceptiblePop, recoveredPop, infectedPop, t);
-    
-    
     %Save data
     nrOfSus = size(susceptiblePop,1);
     nrOfInf = size(infectedPop,1);
     nrOfRec = size(recoveredPop,1);
+    
     susData(t) = nrOfSus;
     infData(t) = nrOfInf;
     recData(t) = nrOfRec;
@@ -53,17 +50,25 @@ for t = 1:timeSteps
     
     %Move all individuals (update population and tileTracker)
     [population, tileTracker] = MoveIndividuals(population, tileTracker, dProb);
+    
+    if(nrOfInf == 0)
+        exitCri = true;
+        break;
+    end
+    
+    if(nrOfSus == 0)
+        exitCri = true;
+        break;
+    end
 end
-if plotSelection ~= 4
-    figure(200)
-    plot([1:timeSteps]', susData', 'b');
-    hold on
-    plot([1:timeSteps]', infData', 'r');
-    hold on
-    plot([1:timeSteps]', recData', 'g');
-    title([' d = ' num2str(dProb) ', \beta = ' num2str(bProb) ', \gamma = ' num2str(yProb) ]);
-    xlabel('Time Steps');
-    ylabel('Number of agents')
-    hold off
+
+
+if(exitCri)
+    for et = t:timeSteps
+        susData(et) = nrOfSus;
+        infData(et) = nrOfInf;
+        recData(et) = nrOfRec;
+    end
+    
 end
 end
