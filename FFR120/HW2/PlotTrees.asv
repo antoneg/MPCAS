@@ -1,9 +1,0 @@
-function PlotTrees(locationStatus,gridSize)
-nrOfLocations = size(locationStatus,1);
-
-for i = 1:nrOfLocations
-  currentLoc = i;
-  x = floor((i/gridSize)+1);
-  y =
-end
-end

@@ -1,8 +1,10 @@
-p = 0.5;
+clear all
+
+p = 0.001;
 f = 0.01;
 
 gridSize = 128;
-timeSteps = 10000;
+timeSteps = 100000;
 
 nrOfLocations = gridSize^2;
 
@@ -14,10 +16,13 @@ fireLocation = [];
 locationStatus = zeros(nrOfLocations,2); %0 empty, 1, tree, 2 fire
 locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
 
+% strike = false;
+strikes = 0;
+
 tic
 for t = 1:timeSteps
     
-    %Trim lists
+    %Trim lists %I can remove the fires lol
     [emptyLocations, treeLocations, fireLocations] = TrimStatusList(locationStatus);
     
     %Identify clusters of fire??
@@ -26,14 +31,29 @@ for t = 1:timeSteps
     locationStatus = SpawnTree(locationStatus, emptyLocations, p);
     
     %Power of Zeus, BOOM!
-    locationStatus = SetTreeOnFire(locationStatus, treeLocations, f);
+    [fireLocations, locationStatus] = SetTreeOnFire(locationStatus, nrOfLocations, gridSize, f);
     
-    %Shut down cluster??
-    
-    if mod(t,1000) == 0
-     figure (1)
-     PlotTrees(locationStatus, gridSize);
+    %Remove forest (but first plot what is being removed)
+    nrOfBurningTrees = size(fireLocations,2);
+    nrOfTrees = size(treeLocations,1);
+    nrOfEmpty = size(emptyLocations, 1);
+    if nrOfBurningTrees > 0
+        strikes = strikes + 1;
+        plotData(strikes,1) = nrOfBurningTrees;
+        plotData(strikes,2) = nrOfTrees;
+        plotData(strikes,3) = nrOfEmpty;
+        
+%         figure (1)
+%         if size(fireLocations,2) >= 1000
+%             PlotTrees(locationStatus, gridSize);
+%         end
+        locationStatus = BurnDownCluster(fireLocations, locationStatus);
     end
-   
+
+    if mod(t, 1000) == 0
+        disp(t/1000);
+    end
+    
 end
+save('myData.mat');
 toc
