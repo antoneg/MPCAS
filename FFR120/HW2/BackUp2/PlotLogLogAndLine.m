@@ -19,41 +19,39 @@ xmin = burnedTrees(end);
 loglog(burnedTrees, cCDF, 'r.')
 hold on
 
-% linFitY = cCDF;
-linFitX = [];
-linFitY = [];
-for i = 1:size(burnedTrees,1)
-    if burnedTrees(i) < 0.3
-        linFitX(end+1) = burnedTrees(i);
-        linFitY(end+1) = cCDF(i);
-    end
-end
 
+p = polyfit(log(burnedTrees),log(cCDF),1);
+z = polyval(p,log(burnedTrees));
 
-p = polyfit(log(linFitX),log(linFitY),1);
-z = polyval(p,log(linFitX));
-
-loglog(linFitX,exp(z), 'b')
-
+% hold on;
+loglog(burnedTrees,exp(z), 'b')
+% set(gca, 'YScale', 'log')
+% set(gca, 'XScale', 'log')
 xlim([xmin 1])
 xlabel('Relative fire size')
 ylabel('cCDF')
 hold on % Hold on for next
 
 
+% y = slope*x+m
 
 
 y1 = log(exp(z(1)));
 y2 = log(exp(z(end)));
-
+y1
+y2
 x1 = log(burnedTrees(1));
 x2 = log(burnedTrees(end));
+x1
+x2
 
 yDiff = y2-y1;
 xDiff = x2 - x1;
 
 slope = yDiff/xDiff;
 
+
+slope
 tau = 1-slope;
 tau
 
