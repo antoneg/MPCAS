@@ -5,17 +5,31 @@ function  [emptyLocations, treeLocations, fireLocations] = TrimStatusList(locati
 tmpLocs = sortrows(locationStatus,2);
 
 emptyIndx = find(tmpLocs(:,2) == 0, 1);
-emptyIndxSize = emptyIndx(1);
+emptyIndxSize = size(emptyIndx,1);
+
+if emptyIndxSize == 0
+    emptyIndx = 0;
+end
 
 treeIndx = find(tmpLocs(:,2) == 1,1);
-treeIndx = treeIndx(1);
+treeIndxSize = size(treeIndx,1);
+
+
+if treeIndxSize == 0 
+    treeIndx = 0;
+end
 
 burningIndx = find(tmpLocs(:,2) == 2,1);
-burningIndx(1);
+burningIndxSize = size(burningIndx,1);
+
+if burningIndxSize ==0
+    burningIndx = 0;
+end
+
 
 if emptyIndx == 0
-emptyLocations = [];
-else 
+    emptyLocations = [];
+else
     if treeIndx == 0
         if burningIndx == 0
             emptyLocations = tmpLocs(1:end,1);
@@ -30,11 +44,9 @@ end
 
 if treeIndx == 0
     treeLocations = [];
-    treeIndx
 else
     if burningIndx == 0
         treeLocations = tmpLocs(treeIndx:end,1);
-        treeLocations
     else
         treeLocations = tmpLocs(treeIndx:(burningIndx-1),1);
     end
@@ -49,9 +61,9 @@ end
 
 % if (treeIndx == 0 && burningIndx == 0) %No trees
 %    emptyLocations = tmpLocs(1:end,1);
-%    
+%
 % elseif (treeIndx > 0) && (burningIndx == 0) %trees but no burning trees
 % elseif (treeIndx == 0) && (burningIndx > 0)
-% else 
-%     
+% else
+%
 % end

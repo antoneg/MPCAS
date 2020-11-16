@@ -31,7 +31,7 @@ for t = 1:timeSteps
     %Lightning strike
     [fireLocations, locationStatus] = SetTreeOnFire(locationStatus, nrOfLocations, gridSize, f);
     
-    %Plot lattices and count nr of burning trees and tot
+    %Plot lattices and count nr of burning trees and total trees ( burning trees included)
     nrOfBurningTrees = size(fireLocations,2);
     nrOfTrees = size(treeLocations,1);
     if nrOfBurningTrees > 0

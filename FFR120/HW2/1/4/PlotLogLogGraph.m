@@ -1,9 +1,10 @@
+clear all
 gridSize = 128;
 
 data = load('myData.mat');
 burnedTrees = data.plotData(:,1);
 trees = data.plotData(:,2);
-allTrees = burnedTrees + trees; %Use this for later
+allTrees = trees; %Use this for later
 
 % ---------Plot log log graph from sim------------
 burnedTrees = burnedTrees./(gridSize^2); % relative fire size
@@ -32,12 +33,13 @@ hold on % Hold on for next
 nrOfPreClusters = size(trees, 1);
 nrOfLocations = gridSize^2;
 recreatedClusters = zeros(nrOfPreClusters, 1);
-
+allTrees = sort(allTrees);
+nrOfPreClusters
 for i = 1:nrOfPreClusters
     forestDensityProb = (allTrees(i)/(gridSize^2));
-    
-    locationStatus = zeros(nrOfLocations,2); %0 empty, 1, tree, 2 fire
-    locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
+    forestDensityProb
+     locationStatus = zeros(nrOfLocations,2); %0 empty, 1, tree, 2 fire
+     locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
     
     %Initialize forest
     for l = 1:nrOfLocations
@@ -50,22 +52,24 @@ for i = 1:nrOfPreClusters
     end
     
     %Get list of treeLocations
+
     [emptyLocations, treeLocations, fireLocations] = TrimStatusList(locationStatus);
-    
+ 
     %Select a random tree to strike
     nrCompTrees = size(treeLocations, 1);
     rIndx = randi([1, nrCompTrees]);
     strikeLoc = treeLocations(rIndx);
     
     %Burn cluster of trees and retrieve the size of the cluster
+ 
     [cluster, locationStatus] = BurnNeighbours(locationStatus, strikeLoc, gridSize);
+
     
     clusterSize = size(cluster, 2);
     recreatedClusters(i) = clusterSize;
     
-    if mod(t, 1000) == 0
-        disp(t/1000);
-    end
+    
+    i
 end
 
 %Repeat procedure
@@ -83,4 +87,4 @@ end
 
 xmin = recreatedClusters(end);
 plot(recreatedClusters, cCDF2, 'g.')
-
+save('plotData.mat');
