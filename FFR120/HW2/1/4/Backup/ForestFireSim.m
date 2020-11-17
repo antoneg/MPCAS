@@ -8,14 +8,16 @@ treeLocations = [];
 fireLocations = [];
 
 %all empty at init
-locationStatus = zeros(nrOfLocations,1); %0 empty, 1, tree, 2 fire
-% locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
+locationStatus = zeros(nrOfLocations,2); %0 empty, 1, tree, 2 fire
+locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
 
 strikes = 0;
 plotCounter = 0;
 
 figCounter = 1;
 for t = 1:timeSteps
+    
+    %Keep track of exacly what positions are empty or have trees (fireLocations not really relevant here)
     
     
     %Spawn new trees

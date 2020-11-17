@@ -12,16 +12,16 @@ allTrees = sort(allTrees);
 
 for i = 1:nrOfPreClusters
     forestDensityProb = (allTrees(i)/(gridSize^2));
-     locationStatus = zeros(nrOfLocations,1); %0 empty, 1, tree, 2 fire
-%      locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
+     locationStatus = zeros(nrOfLocations,2); %0 empty, 1, tree, 2 fire
+     locationStatus(1:nrOfLocations,1) = [1:nrOfLocations];
     
     %Initialize forest
     for l = 1:nrOfLocations
         r = rand;
         if r < forestDensityProb
-            locationStatus(l) = 1;
+            locationStatus(l,2) = 1;
         else
-            locationStatus(l) = 0;
+            locationStatus(l,2) = 0;
         end
     end
     
@@ -41,7 +41,7 @@ for i = 1:nrOfPreClusters
     clusterSize = 0;
     
     for j = 1:size(locationStatus,1)
-        if locationStatus(j) == 2
+        if locationStatus(j,2) == 2
             clusterSize = clusterSize + 1; 
         end
     end

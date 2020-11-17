@@ -13,7 +13,7 @@ saveD = false;
 plotCounterLimit = 0;
 
 %Returning different list sizes, so no loop.
-data512 = ForestFireSim(p ,f, 512, 10000, plotSetting, saveName, saveD, plotCounterLimit);
+data512 = ForestFireSim(p ,f, 512, timeSteps, plotSetting, saveName, saveD, plotCounterLimit);
 data256 = ForestFireSim(p ,f, 256, timeSteps, plotSetting, saveName, saveD, plotCounterLimit);
 data128 = ForestFireSim(p ,f, 128, timeSteps, plotSetting, saveName, saveD, plotCounterLimit);
 data64 = ForestFireSim(p ,f, 64, timeSteps, plotSetting, saveName, saveD, plotCounterLimit);

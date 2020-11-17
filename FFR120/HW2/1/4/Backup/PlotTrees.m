@@ -9,12 +9,12 @@ for i = 1:nrOfLocations
         col = gridSize;
     end
     
-    if locationStatus(i) == 1
+    if locationStatus(i,2) == 1
         
         plot(col,row,'g.')
         hold on
     end
-    if locationStatus(i) == 2
+    if locationStatus(i,2) == 2
         plot(col,row,'r.')
         hold on
     end
