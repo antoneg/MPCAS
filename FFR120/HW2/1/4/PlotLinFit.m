@@ -11,7 +11,8 @@ linFitX = [];
 linFitY = [];
 
 for i = 1:size(relativeFireSize,1)
-    if relativeFireSize(i) < tweak
+    if (i/(size(relativeFireSize,1))) < tweak
+    else
         linFitX(end+1) = relativeFireSize(i);
         linFitY(end+1) = cCDF(i);
     end

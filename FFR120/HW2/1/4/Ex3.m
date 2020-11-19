@@ -16,9 +16,11 @@ f2 = SET2.f;
 % gridSize = 128;
 % tweak = 0.00014;
 
-burnedTrees = SET2_fire;
+burnedTrees = SET1_fire;
+p = p1;
+f = f1;
 gridSize = 128;
-tweak = 0.2;
+tweak = 0.25;
 
 %A rank-frequency plot with the fire data and the linear fit used to find
 %the exponent tau;
@@ -26,8 +28,8 @@ figure(1)
 PlotLogLog(burnedTrees, gridSize, 'r.');
 hold on
 tau = PlotLinFit(burnedTrees, gridSize, tweak, 'b-');
-legend('Simulation', ['Linear fit with \tau = ' num2str(tau,3)])
-title(['Fire sim & linear fit (for RFS <', num2str(tweak), ')'])
+legend('Simulation', ['Linear fit with \tau = ' num2str(tau,4) ])
+title(['Fire sim & linear fit (excluding ', num2str(tweak*100), '% of the data (larger RFS)' '. p = ' num2str(p) ', f = ' num2str(f)])
 hold off
 tau
 
@@ -37,6 +39,6 @@ figure(2)
 PlotLogLog(burnedTrees, gridSize, 'r.');
 hold on
 GenerateAndPlotSynthetic(tau, burnedTrees, 'g.')
-legend('Simulation', ['Synthetic data with \tau = ' num2str(tau,3)])
-title(['Fire sim & synthetic data (for RFS <', num2str(tweak), ')'])
+legend('Simulation', ['Synthetic data with \tau = ' num2str(tau,4)])
+title(['Fire sim & synthetic data based on \tau = ' num2str(tau,4) ' .p = ' num2str(p) ', f = ' num2str(f)])
 hold off

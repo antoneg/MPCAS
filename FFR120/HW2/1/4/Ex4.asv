@@ -16,21 +16,21 @@ burnedTrees64 = data64(:,1);
 burnedTrees128 = data128(:,1);
 burnedTrees256 = data256(:,1);
 burnedTrees512 = data512(:,1);
-
+tweak = 0.5;
 figure(1)
-tau8 = PlotLinFit(burnedTrees8, 8, 1, 'b-');
+tau8 = PlotLinFit(burnedTrees8, 8, tweak, 'b-');
 hold on
-tau16 = PlotLinFit(burnedTrees16, 16, 1, 'b-');
+tau16 = PlotLinFit(burnedTrees16, 16, tweak, 'b-');
 hold on
-tau32 = PlotLinFit(burnedTrees32, 32, 1, 'b-');
+tau32 = PlotLinFit(burnedTrees32, 32, tweak, 'b-');
 hold on
-tau64 = PlotLinFit(burnedTrees64, 64, 1, 'b-');
+tau64 = PlotLinFit(burnedTrees64, 64, tweak, 'b-');
 hold on
-tau128 = PlotLinFit(burnedTrees128, 128, 1, 'b-');
+tau128 = PlotLinFit(burnedTrees128, 128, tweak, 'b-');
 hold on
-tau256 = PlotLinFit(burnedTrees256, 256, 1, 'b-');
+tau256 = PlotLinFit(burnedTrees256, 256, tweak, 'b-');
 hold on
-tau512 = PlotLinFit(burnedTrees512, 512, 1, 'b-');
+tau512 = PlotLinFit(burnedTrees512, 512, tweak, 'b-');
 hold off
 
 % yAxis = [tau8, tau16, tau32, tau64, tau128, tau256 ];
@@ -39,31 +39,30 @@ hold off
 yAxis = [tau8, tau16, tau32, tau64, tau128, tau256, tau512 ];
 xAxis = [(1/8), (1/16), (1/32), (1/64), (1/128),(1/256), (1/512)] ;
 
-% tau512
-% xk = [tau256, tau512];
-% yk = [(1/256), (1/512)];
-
 figure(2)
 plot(xAxis, yAxis, 'r');
+xlabel('1/N');
+ylabel('\tau')
+title(['\tau as function of 1/N. Data points (for RFS<' num2str(tweak,2) ')' 'and lines between data points.']);
+hold on
+for p = 1:7
+    plot(xAxis(p), yAxis(p), 'ro')
+    hold on
+end
+hold off
 
-
-% plot(xk, yk, 'bo')
 figure(3)
-[p, ignore] = polyfit(xAxis, yAxis, 3);
-fitX = (0:0.001:(1/8));
-fitY = polyval(p, fitX);
-plot(fitX, fitY)
-% syms fs(x) %slope function
-% fs(x) = coefs(1)*x + coefs(2);
-% fplot(fs)
-% hold on
-% plot(0,coefs(2), 'bo');
-% hold on 
-% text(0, coefs(2), num2str(coefs(2)));
-% xlim([0 0.14])
-% ylim([coefs(2) yAxis(1)])
+[p, ignore] = polyfit(xAxis, yAxis, 2);
+pX = (0:0.001:(1/8));
+pY = polyval(p, pX);
+plot(pX, pY, 'g')
+hold on
+for p = 1:7
+    plot(xAxis(p), yAxis(p), 'go')
+    hold on
+end
 
 xlabel('1/N');
 ylabel('\tau')
-title('Plot over \tau as function of 1/N, where \tau is calculated using all data points')
-
+title([ '\tau as function of 1/N. ' 'Linear fit based on datapoints' ', where lin fit for each data point is calculated using (RFS < ' num2str(tweak,2) ')'])
+hold off

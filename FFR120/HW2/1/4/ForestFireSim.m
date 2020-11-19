@@ -47,6 +47,8 @@ for t = 1:timeSteps
             ylabel('y');
             plotCounter = 0;
             figCounter = figCounter + 1;
+            rfs = nrOfBurningTrees/(gridSize^2);
+            disp([num2str(t) ' gave rfs: ' num2str(rfs)])
      else
          plotCounter = plotCounter + 1;
      end        
