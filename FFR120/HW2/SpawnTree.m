@@ -6,7 +6,7 @@ for i = 1:nrOfEmptyLocations
     loc = emptyLocations(i);
     r = rand;
     if r < p
-        updatedLocationStatus(loc,2) = 1;
+        updatedLocationStatus(loc) = 1;
     end
 end
 % rp = rand;

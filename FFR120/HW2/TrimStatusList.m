@@ -2,7 +2,11 @@ function  [emptyLocations, treeLocations, fireLocations] = TrimStatusList(locati
 % emptyLocations = [];
 % treeLocations = [];
 % fireLocations = [];
-tmpLocs = sortrows(locationStatus,2);
+nrOfLocs = size(locationStatus,1);
+tmpLocs = zeros(nrOfLocs,2);
+tmpLocs(:,1) = [1:nrOfLocs];
+tmpLocs(:,2) = locationStatus;
+tmpLocs = sortrows(tmpLocs,2);
 
 emptyIndx = find(tmpLocs(:,2) == 0, 1);
 emptyIndxSize = size(emptyIndx,1);
