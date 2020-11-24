@@ -1,0 +1,91 @@
+function updatedClusters = OptimizeClusterData(clusters)
+    nrOfParticles = size(clusters,1);
+    
+    updatedClusters = clusters;
+for i = 1:nrOfParticles
+    visited = [0];
+    curClust = updatedClusters(:,i);
+    initVec = ones(nrOfParticles,1);
+    j = 1;
+    while j <= nrOfParticles
+     
+       comClust = updatedClusters(:,j);              
+        
+        m = max(updatedClusters(:,i) & comClust);
+        b2 = true;
+        for q = 1:size(visited,2)
+            if visited(q) == j
+                b2 = false;
+                break
+            end
+        end
+      
+        if (m && b2)
+            visited(end + 1) = j;
+            updatedClusters(:,i) = updatedClusters(:,i) | comClust;
+            j = 1;
+        else
+            j = j+1;
+        end         
+    
+    end
+%     updatedClusters(:,i) = curClust;
+end
+end
+
+% function updatedClusters = OptimizeClusterData(clusters)
+%     nrOfParticles = size(clusters,1);
+%     
+%     updatedClusters = clusters;
+% for i = 1:nrOfParticles
+%     visited = [0];
+%     curClust = updatedClusters(:,i);
+%     initVec = ones(nrOfParticles,1);
+%     for j = 1:nrOfParticles
+%         comClust = updatedClusters(:,j);              
+%         
+%         m = max(updatedClusters(:,i) & comClust);        
+%         b2 = any(visited ~= j);
+%       
+%         if (m && b2)
+%             visited(end + 1) = j;
+%             updatedClusters(:,i) = updatedClusters(:,i) | comClust;
+%             j = 1;
+%         end
+%          
+%     end
+%     if i == 2
+%     visited
+%     end
+% %     updatedClusters(:,i) = curClust;
+% end
+% clusters
+% end
+
+% function updatedClusters = OptimizeClusterData(clusters)
+%     nrOfParticles = size(clusters,1);
+%     
+%     updatedClusters = zeros(nrOfParticles,nrOfParticles);
+% for i = 1:nrOfParticles
+%     visited = [];
+%     curClust = clusters(:,i);
+%     initVec = ones(nrOfParticles,1);
+%     for j = 1:nrOfParticles
+%         comClust = clusters(:,j);
+%         
+%         m = max(curClust & comClust);        
+%         b2 = any(visited ~= j);
+%       
+%         if (m && b2)
+%         
+%         if (m && b2)
+%             visited(end + 1) = j;
+%             curClust = curClust | comClust;
+%             j = 1;
+%         end
+%          
+%     end
+%     updatedClusters(:,i) = curClust;
+% end
+% 
+% end

@@ -1,0 +1,31 @@
+function  updatedParticles = UpdatePositions(particles, eta, gridSize)
+
+updatedParticles = particles;
+nrOfParticles = size(particles,1);
+
+etaMin = -eta/2;
+etaMax = eta/2;
+rXi = (etaMax-etaMin).*rand(nrOfParticles) + etaMin;
+
+for i = 1:nrOfParticles
+    
+    currentX = particles(i,1);
+    currentY = particles(i,2);
+    v = particles(i,3);
+    currentDir = particles(i,4);
+    
+    xi = rXi(i);
+    
+    newDir = currentDir + Torque(particles, i) + xi; %xi is noice 
+    newX = currentX + v*cos(newDir);
+    newY = currentY + v*sin(newDir);
+    
+    if newX 
+    
+    updatedParticles(i,1) = newX;
+    updatedParticles(i,2) = newY;
+    updatedParticles(i,4) = newDir;
+    
+end
+end
+

@@ -1,0 +1,75 @@
+clear all
+timeSteps = 2000;
+nrOfParticles = 100;
+gridSize = 100;
+data = load('lowEta.mat');
+particleData = data.particleData;
+clusterData = data.clusterData;
+
+myVideo = VideoWriter('myVideoFile'); %open video file
+myVideo.FrameRate = 10;  %can adjust this, 5 - 10 works well for me
+open(myVideo)
+
+for t = 1:10:1000
+   particles = particleData(t,:,:);
+   particles = reshape(particles,[nrOfParticles,4]);
+   clusters = clusterData(t,:,:);
+   clusters = reshape(clusters,[nrOfParticles,nrOfParticles]);
+    
+   pxs = particles(:,1);
+   pys = particles(:,2);
+    
+        plot(pxs,pys,'ko', 'MarkerSize', 4);
+        hold on
+        ylim([1, gridSize])
+        xlim([1, gridSize])
+   
+    for i = 1:nrOfParticles
+        localCluster = clusters(:,i);
+        localCluster = find(localCluster);
+        
+        clusterSize = size(localCluster,1);
+        for j = 1:size(localCluster,1)
+        pIndx = localCluster(j);
+            
+        x = particles(pIndx,1);
+        y = particles(pIndx,2);
+        if clusterSize == 2
+        plot(x,y,'bo', 'MarkerSize', 4);
+        else
+        hold on
+        ylim([1, gridSize])
+        xlim([1, gridSize])
+        end
+
+    end
+    frame = getframe(gcf); %get frame
+    writeVideo(myVideo, frame);
+    hold off
+   t
+end
+close(myVideo)
+
+
+% clear all
+% timeSteps = 2000;
+% nrOfParticles = 100;
+% gridSize = 100;
+% data = load('lowEta.mat');
+% particleData = data.particleData;
+% clusterData = data.clusterData;
+% 
+% myVideo = VideoWriter('myVideoFile'); %open video file
+% myVideo.FrameRate = 10;  %can adjust this, 5 - 10 works well for me
+% open(myVideo)
+% 
+% for t = 1:timeSteps
+%    particles = particleData(t,:,:);
+%    particles = reshape(particles,[nrOfParticles,4]);
+%    clusters = clusterData(t,:,:);
+%    clusters = reshape(clusters,[nrOfParticles,nrOfParticles]);
+%    figure(1)
+%    PlotParticles(particles);
+%    PlotClusters(clusters, particles);
+%    hold off
+% end
