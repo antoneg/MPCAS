@@ -1,4 +1,0 @@
-function particles = InitializeParticles(nrOfParticles, gridSize, eta)
-    rxs = randi([1, gridsize], nrOfParticles, 1);
-    rys = randi([1, gridsize], nrOfParticles, 1);
-end
