@@ -1,0 +1,7 @@
+function PlotDegree(M, n)
+    nodeTotalList = zeros(1:n-1);
+    for i = 1:(size(M,1))
+        nodeRow = M(i,:);
+        nodeRow = nodeRow()
+    end
+end
