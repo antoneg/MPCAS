@@ -1,11 +1,13 @@
 clear all
 
-gIndx = 3;
+gIndx = 2;
 
 graphData = GetGraphs(gIndx);
 graphMatrix = sparse(graphData(:,1),graphData(:,2),1);
 graphMatrix = full(graphMatrix);
+tic
 [diam, avrgDist] = DistanceAnalysis(graphMatrix);
+toc
 cc = ClusterCoeffAnalysis(graphMatrix);
  
 fprintf('Average dist: %.5f \n',avrgDist);
@@ -20,6 +22,6 @@ figure(3)
 plot(graph(graphMatrix))
 title(['Network ', num2str(gIndx)])
 
-save(num2str(gIndx)) 
+% save(num2str(gIndx)) 
 
 
